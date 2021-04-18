@@ -10,11 +10,10 @@
         <span>{{this.AuthorizedUser}}</span>
     </div>
     <div class="right-side">
-         <span v-if="isCookie">
-              <a  href="/logout" class="btn my-2">Logout</a>
-             <button @:click="logout" class="btn btn-primary my-2">Logout</button>
+         <span>
+             <button @click="logout" class="btn btn-primary my-2">Logout</button>
         </span>
-         <a v-else href="/#/authorization" class="btn btn-primary my-2">Authorization</a>
+         <a href="/#/authorization" class="btn btn-primary my-2">Authorization</a>
      </div>
  </div>
 
@@ -34,26 +33,24 @@
       isCoreRoute() {
         return this.$route.path === '/';
       },
-      isCookie(){
-        return VueCookies.isKey('Token')
-      }
+     /* isCookie(){
+        return VueCookies.isKey()
+      }*/
     },
     methods: {
       routeBack() {
         this.$router.go(-1);
       },
         logout() {
-                  fetch("http://localhost:8080/logout", {
-                      method:"GET"
-                  })
-                  console.log("llog")
-                   .then(response => {
-                       console.log(response)
-                        VueCookies.remove('Token');
-                       window.location = '/'
+                     fetch("http://localhost:8080/logout", {
+                                             method:"GET"
+                     })
+                     .then (response => {
 
+                     VueCookies.remove("Token");
+                     console.log(response,"logout++", VueCookies.isKey("Token"))
+                     window.location = '/#/authorization'
                    })
-
               },
     }
   }

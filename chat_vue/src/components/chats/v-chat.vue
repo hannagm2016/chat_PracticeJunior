@@ -16,6 +16,7 @@
     </div>
 </div>
   <div class='v-user-chat'>
+<span>I'm {{this.AuthorizedUser}}</span>
 <span>{{name}}</span>
   <hr/>
     <v-message
@@ -69,6 +70,7 @@
     console.log("mounted")
           this.connectToWebsocket()
           this.getChats()
+          console.log(this.AuthorizedUser)
         },
     methods: {
     getChats() {

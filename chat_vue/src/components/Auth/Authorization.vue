@@ -20,7 +20,7 @@
         <a href="/#/registration">Registration</a>
     </div>
     <p>{{this.AuthorizedUser}}</p>
-</main>
+    </main>
   </div>
 </template>
 
@@ -38,6 +38,7 @@ export default {
        link: [],
        errorMessage: null
     }),
+
     mounted() {
        fetch("http://localhost:8080/authorization")
          .then(response =>response.json())
@@ -45,6 +46,7 @@ export default {
           this.link = data;
          })
      },
+
       methods: {
         submit() {
                axios.post(`http://localhost:8080/login`, {
@@ -54,7 +56,7 @@ export default {
                })
                .then(response => {
                    this.AuthorizedUser=this.User.Name;
-                   console.log(this.AuthorizedUser,"_______")
+                   console.log(this.AuthorizedUser,"____*___",response.data)
                    this.errorMessage = null;
                    VueCookies.set('Token' , response.data, '1d');
                     window.location = '/#/chat'
@@ -64,9 +66,9 @@ export default {
                   // message = error.response.data
                });
 
-       }
-     }
- }
+       },
+      }
+}
 
 </script>
 

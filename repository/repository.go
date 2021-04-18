@@ -18,7 +18,7 @@ type ChatModelImpl interface {
 	FindChat(UserId float64) []models.Message
 	FindChats(Uid float64) []models.Chats
 	SaveMessage(mesage models.Messages)
-	CreateUser(contact models.Contact)
+	    CreateUser(contact models.Contact)
     	FindCustomerByName(userName string) models.Contact
     	FindCustomerById(userId int) models.Contact
     	FindCustomerByEmail(email string) models.Contact
@@ -30,9 +30,7 @@ func NewChatModel(db *gorm.DB) *ChatModel {
 		db: db,
 	}
 }
-
 func (p *ChatModel) FindChats(currentUser float64) []models.Chats {
-
 	Msgs := []models.Message{}
 	Messages := []models.Message{}
 	  // тут будет ид текущего юзера
@@ -64,10 +62,8 @@ func (p *ChatModel) FindChats(currentUser float64) []models.Chats {
 func (p *ChatModel) FindChat(UserId float64) []models.Message {
 	messages := []models.Message{}
 	p.db.Find(&messages, "user_id = ?", UserId)
-
 	return messages
 }
-
 func (p *ChatModel) FindContacts() []models.Contact {
 	contacts := []models.Contact{}
 	p.db.Find(&contacts)
@@ -79,14 +75,7 @@ func (p *ChatModel) FindContact(UserId float64) models.Contact {
 	return contact
 }
 
-func (p *ChatModel) SaveMessage(message models.Messages) { //не инсертит
+func (p *ChatModel) SaveMessage(message models.Messages) {
 	p.db.Create(&message)
-	/*	type message struct{
-		    userToId, userFromId float64
-		    text, time string
-		}
-			fmt.Println(&mes , "&&&&&")
-		p.db.Create(&mes)*/
-	//p.db.Exec("insert into messages (id, user_from_id, user_to_id, time, text) values(,3,?,?,?)", mess.UserId,mess.Time, mess.Text)
 
 }

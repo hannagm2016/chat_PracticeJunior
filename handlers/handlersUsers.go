@@ -24,6 +24,30 @@ type AccessToken struct {
 	Expiry int64
 }
 
+/*func (h *handler) AuthorisationPost(c echo.Context) error {
+	var user models.Contact
+    if err:=c.Bind (&user); err !=nil {
+        return err
+    }
+    Customer := h.ChatModel.FindCustomerByEmail(user.Email)
+    if Customer.Name !="" {
+	sessionId := inMemorySession.Init(user.Email)
+	cookie = &http.Cookie{
+		Name:    "COOKIE_NAME",
+		Value:   sessionId,
+		Expires: time.Now().Add(5 * time.Minute),
+		MaxAge:  60 * 60,
+	}
+fmt.Println("cookie setted")
+	c.SetCookie(cookie)
+		fmt.Println("Endpoint Hit: authorisation", Customer)
+    	return c.JSON(http.StatusOK, Customer)
+	} else {
+			fmt.Println("Endpoint Hit: authorisation, not authorized")
+	 return c.String (http.StatusOK, "You are not authorized!")
+	}
+}*/
+
 func (h *handler) Login(c echo.Context) error {
     var data map[string]string
         if err:=c.Bind (&data); err !=nil {
@@ -40,7 +64,7 @@ func (h *handler) Login(c echo.Context) error {
             fmt.Println("Incorrect Password")
         return c.JSON(http.StatusBadRequest, "Incorrect Password")
     }*/
-    Customer=user;
+Customer=user;
     claims :=jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
         Issuer: strconv.Itoa(int(user.Id)),
         ExpiresAt: time.Now().Add(time.Hour*24).Unix(),
@@ -50,7 +74,7 @@ func (h *handler) Login(c echo.Context) error {
         return c.String(http.StatusInternalServerError, "Could not login")
     }
         cookie:=http.Cookie{
-            Name: "Token",
+            Name: "jwt",
             Value: token,
             Expires: time.Now().Add(time.Hour *24),
             HttpOnly: true,
@@ -61,7 +85,7 @@ func (h *handler) Login(c echo.Context) error {
 }
 
 func (h *handler) User(c echo.Context) error {
-    cookie, err :=c.Cookie("Token")
+    cookie, err :=c.Cookie("jwt")
     if err!=nil {
         return c.JSON(http.StatusUnauthorized, "Unauthorized")
     }
@@ -79,18 +103,17 @@ func (h *handler) User(c echo.Context) error {
 
 func (h *handler) Logout(c echo.Context) error {
     cookie:= http.Cookie {
-        Name: "Token",
+        Name: "jwt",
         Value: "",
         Expires: time.Now().Add(-time.Hour),
         HttpOnly: true,
     }
-    var no  models.Contact
-    Customer= no
-    fmt.Println(Customer,"+++", cookie)
     c.SetCookie(&cookie)
-       // return c.String (http.StatusOK, "Logged Outed")
-       	 return c.Redirect(http.StatusMovedPermanently, "/")
-
+       var no  models.Contact
+        Customer= no
+        fmt.Println(Customer,"+++", cookie)
+         return c.Redirect(http.StatusMovedPermanently, "/")
+        //return c.String (http.StatusOK, "Logged Outed")
 }
 
 func (h *handler) RegistrationPost(c echo.Context) error {
