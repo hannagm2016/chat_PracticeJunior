@@ -16,8 +16,13 @@ type ChatModelImpl interface {
 	FindContact(id float64) models.Contact
 	FindContacts() []models.Contact
 	FindChat(UserId float64) []models.Message
-	FindChats() []models.Chats
+	FindChats(Uid float64) []models.Chats
 	SaveMessage(mesage models.Messages)
+	CreateUser(contact models.Contact)
+    	FindCustomerByName(userName string) models.Contact
+    	FindCustomerById(userId int) models.Contact
+    	FindCustomerByEmail(email string) models.Contact
+    	FindCustomerId(name string) float64
 }
 
 func NewChatModel(db *gorm.DB) *ChatModel {
@@ -26,11 +31,11 @@ func NewChatModel(db *gorm.DB) *ChatModel {
 	}
 }
 
-func (p *ChatModel) FindChats() []models.Chats {
+func (p *ChatModel) FindChats(currentUser float64) []models.Chats {
 
 	Msgs := []models.Message{}
 	Messages := []models.Message{}
-	currentUser := 3                                                                                                       // тут будет ид текущего юзера
+	  // тут будет ид текущего юзера
 	p.db.Raw("SELECT id, user_from_id as user_id, text, time FROM messages where user_to_id = ?", currentUser).Scan(&Msgs) //пока возвращает первое сообщение
 	for index, _ := range Msgs {
 		Msgs[index].Type = "others"
