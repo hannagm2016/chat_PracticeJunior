@@ -20,6 +20,7 @@
       return {}
     },
     computed: {
+
       className() {
         return {
           'chat__own': this.message.Type === 'own',

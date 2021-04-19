@@ -13,10 +13,11 @@ type Contact struct {
 }
 type Chats struct {
 	Id float64
+	MesId float64
 	//UserId float64
 	Name string
-	//Time string
-	//	Text string
+	Time string
+	Text string
 	Chat []Message `gorm:"foreignKey:UserId;references:Id"` //`gorm:"-"`
 }
 type Message struct {
