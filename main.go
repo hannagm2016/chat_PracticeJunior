@@ -3,11 +3,9 @@ package main
 import (
 	"ChatPerson/db"
 	"github.com/labstack/echo"
-	//	"site/models"
 	"ChatPerson/handlers"
 	"ChatPerson/repository"
 	"github.com/labstack/echo/middleware"
-	//"net/http"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/websocket"
@@ -25,10 +23,15 @@ func main() {
 	e.GET("/chats", h.Chats)
 	e.GET("/chat/:userId", h.Chat)
 	e.GET("/contacts", h.Contacts)
-	//e.GET("/chat/:name", h.SingleChat)
 	e.POST("/message", h.AddMessage)
 	e.GET("/contact/:id", h.SingleCustomer)
 	e.GET("/socket", socketReaderCreate)
+	e.GET("/authorization", h.Authorisation)
+	e.GET("/logout", h.Logout)
+	e.GET("/FBLogin", h.FBLogin)
+	e.GET("/GoogleLogin", h.GoogleLogin)
+	e.POST("/login", h.Login)
+	e.POST("/registrationPost", h.RegistrationPost)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

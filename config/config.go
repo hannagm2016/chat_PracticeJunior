@@ -3,7 +3,11 @@ import (
 "github.com/tkanos/gonfig"
 "fmt"
 )
-
+type Configuration struct {
+  ClientID string
+  ClientSecret string
+  RedirectURL string
+}
 type DbConnection struct {
      User string
      Password string

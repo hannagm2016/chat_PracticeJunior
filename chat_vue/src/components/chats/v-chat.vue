@@ -5,7 +5,7 @@
           v-for="chat in chats"
           :key="chat.Id"
       >
-      <div class='v-user' @click="toUserChat(chat)">
+      <div v-if="chat.Chat!=null" class='v-user' @click="toUserChat(chat)">
           <div class="v-user__avatar"></div>
           <div class="v-user__info">
             <p class="info__name">{{chat.Name}}</p>
@@ -16,6 +16,7 @@
     </div>
 </div>
   <div class='v-user-chat'>
+<span>I'm {{this.AuthorizedUser}}</span>
 <span>{{name}}</span>
   <hr/>
     <v-message
@@ -55,7 +56,7 @@
     data() {
       return {
       userId: null,
-      name: null,
+      name: 'Please select contact to start chat',
         chats:[],
         messages:[],
         connection: null,
@@ -69,6 +70,7 @@
     console.log("mounted")
           this.connectToWebsocket()
           this.getChats()
+          console.log(this.AuthorizedUser)
         },
     methods: {
     getChats() {

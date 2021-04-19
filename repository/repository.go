@@ -16,8 +16,13 @@ type ChatModelImpl interface {
 	FindContact(id float64) models.Contact
 	FindContacts() []models.Contact
 	FindChat(UserId float64) []models.Message
-	FindChats() []models.Chats
+	FindChats(Uid float64) []models.Chats
 	SaveMessage(mesage models.Messages)
+	    CreateUser(contact models.Contact)
+    	FindCustomerByName(userName string) models.Contact
+    	FindCustomerById(userId int) models.Contact
+    	FindCustomerByEmail(email string) models.Contact
+    	FindCustomerId(name string) float64
 }
 
 func NewChatModel(db *gorm.DB) *ChatModel {
@@ -25,12 +30,10 @@ func NewChatModel(db *gorm.DB) *ChatModel {
 		db: db,
 	}
 }
-
-func (p *ChatModel) FindChats() []models.Chats {
-
+func (p *ChatModel) FindChats(currentUser float64) []models.Chats {
 	Msgs := []models.Message{}
 	Messages := []models.Message{}
-	currentUser := 3                                                                                                       // тут будет ид текущего юзера
+	  // тут будет ид текущего юзера
 	p.db.Raw("SELECT id, user_from_id as user_id, text, time FROM messages where user_to_id = ?", currentUser).Scan(&Msgs) //пока возвращает первое сообщение
 	for index, _ := range Msgs {
 		Msgs[index].Type = "others"
@@ -59,10 +62,8 @@ func (p *ChatModel) FindChats() []models.Chats {
 func (p *ChatModel) FindChat(UserId float64) []models.Message {
 	messages := []models.Message{}
 	p.db.Find(&messages, "user_id = ?", UserId)
-
 	return messages
 }
-
 func (p *ChatModel) FindContacts() []models.Contact {
 	contacts := []models.Contact{}
 	p.db.Find(&contacts)
@@ -74,14 +75,7 @@ func (p *ChatModel) FindContact(UserId float64) models.Contact {
 	return contact
 }
 
-func (p *ChatModel) SaveMessage(message models.Messages) { //не инсертит
+func (p *ChatModel) SaveMessage(message models.Messages) {
 	p.db.Create(&message)
-	/*	type message struct{
-		    userToId, userFromId float64
-		    text, time string
-		}
-			fmt.Println(&mes , "&&&&&")
-		p.db.Create(&mes)*/
-	//p.db.Exec("insert into messages (id, user_from_id, user_to_id, time, text) values(,3,?,?,?)", mess.UserId,mess.Time, mess.Text)
 
 }

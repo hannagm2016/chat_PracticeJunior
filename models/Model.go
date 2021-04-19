@@ -8,7 +8,8 @@ type Contact struct {
 	Id    float64
 	Name  string
 	Phone string
-	//Password    string
+	Password    []byte
+	Email string
 	Status string
 }
 type Chats struct {
@@ -32,4 +33,10 @@ type Messages struct {
 	UserFromId float64
 	Time       string
 	Text       string
+}
+
+type BaseModel struct {
+	IsAuthorized bool
+	Chat       []Chats
+	Cust         Contact
 }
