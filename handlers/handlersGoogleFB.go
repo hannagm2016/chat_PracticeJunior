@@ -90,7 +90,7 @@ func (h *handler) FBLogin(c echo.Context) error {
 	name, _ := user.GetString("name")
 	sessionId := inMemorySession.Init(name)
 	cookie = &http.Cookie{
-		Name:    "COOKIE_NAME",
+		Name:    "Token",
 		Value:   sessionId,
 		Expires: time.Now().Add(5 * time.Minute),
 		MaxAge:  60 * 60,
@@ -119,7 +119,7 @@ func (h *handler) GoogleLogin(c echo.Context) error {
 	email, _ := user.GetString("email")
 	sessionId := inMemorySession.Init(email)
 	cookie = &http.Cookie{
-		Name:    "COOKIE_NAME",
+		Name:    "Token",
 		Value:   sessionId,
 		Expires: time.Now().Add(5 * time.Minute),
 		MaxAge:  60 * 60,
