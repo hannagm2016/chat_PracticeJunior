@@ -74,6 +74,7 @@
     getChats() {
          axios.get('http://localhost:8080/chats')
            .then((response)=>  {
+           //response.data.pressInformation.sort(function(a, b){return b['Id']-a['Id']})//добавить сортировку месседжей в поле чата
                this.chats = response.data;
                console.log(this.chats,"***")
            })
