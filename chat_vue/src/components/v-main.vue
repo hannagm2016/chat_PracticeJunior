@@ -2,6 +2,7 @@
   <div class="v-main">
     <v-header/>
     <router-view></router-view>
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   </div>
 </template>
 
@@ -11,7 +12,7 @@ export default {
   name: 'v-main',
   components: {
     vHeader
-  }
+  },
 }
 </script>
 

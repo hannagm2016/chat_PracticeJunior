@@ -5,6 +5,7 @@ import store from './store'
 
 
 Vue.config.productionTip = false
+Vue.AuthorizedUser= Vue.prototype.AuthorizedUser = '';
 
 new Vue({
   router,

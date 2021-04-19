@@ -21,7 +21,7 @@ func NewHandler(p repository.ChatModelImpl) *handler {
 }
 
 func (h *handler) Chats(c echo.Context) error {
-	Chats = h.ChatModel.FindChats()
+	Chats = h.ChatModel.FindChats(Customer.Id)
 	fmt.Println("Endpoint Hit: All chats")
 	return c.JSON(http.StatusOK, Chats)
 }
@@ -53,7 +53,7 @@ func (h *handler) AddMessage(c echo.Context) error {
 	if err := c.Bind(&message); err != nil {
 		return err
 	}
-	mes := models.Messages{UserFromId: 3, UserToId: message.UserId, Time: message.Time, Text: message.Text}
+	mes := models.Messages{UserFromId: Customer.Id, UserToId: message.UserId, Time: message.Time, Text: message.Text}
 
 	fmt.Println("Endpoint Hit: SaveMessage", mes)
 	h.ChatModel.SaveMessage(mes)
