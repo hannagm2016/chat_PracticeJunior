@@ -35,7 +35,6 @@ type Messages struct {
 }
 
 type BaseModel struct {
-	IsAuthorized bool
-	Chat       []Chats
-	Cust         Contact
-}
+	Token string
+	User Contact
+	}

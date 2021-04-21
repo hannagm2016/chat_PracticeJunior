@@ -56,9 +56,9 @@ export default {
                })
                .then(response => {
                    this.AuthorizedUser=this.User.Name;
-                   console.log(this.AuthorizedUser,"____*___",response.data)
+                   console.log(this.AuthorizedUser,"____*___",response.data.Token)
                    this.errorMessage = null;
-                   VueCookies.set('Token' , response.data, '1d');
+                   VueCookies.set('Token' , response.data.Token, '1d');
                     window.location = '/#/chat'
                       })
                .catch(error => {
