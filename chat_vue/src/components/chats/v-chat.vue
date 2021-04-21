@@ -45,6 +45,7 @@
   import vMessage from './v-message'
  // import vUser from '../v-user'
   import axios from 'axios'
+  import {mapActions, mapState} from 'vuex'
 
   export default {
     name: "v-user-chat",
@@ -57,7 +58,7 @@
       return {
       userId: null,
       name: 'Please select contact to start chat',
-        chats:[],
+      //  chats:[],
         messages:[],
         connection: null,
         textValue: '',
@@ -65,21 +66,28 @@
         serverUrl: "ws://localhost:8080/socket"
       }
     },
-
-    mounted: function() {
-    console.log("mounted")
+  computed: {
+      ...mapState([
+        'chats'
+      ])
+    },
+     mounted: function() {
           this.connectToWebsocket()
-          this.getChats()
-          console.log(this.AuthorizedUser)
+      //    this.getChats()
+            this.FETCH_CHATS()
         },
     methods: {
-    getChats() {
+  /*  getChats() {
          axios.get('http://localhost:8080/chats')
            .then((response)=>  {
                this.chats = response.data;
                console.log(this.chats,"***")
            })
-    },
+    },*/
+     ...mapActions([
+            'FETCH_CHATS',
+            'SEND_MSG_TO_CHAT'
+          ]),
     toUserChat(chat) {
           console.log(chat,"++++", chat.Id)
           this.messages = chat.Chat
@@ -102,6 +110,7 @@
                this.messages.push(this.chat)
                console.log(this.chat, "*****")
             this.connection.send(this.chat.Text);
+           //  this.SEND_MSG_TO_CHAT({chat: this.chat})//добавить сохранение чата в vuex
             axios.post('http://localhost:8080/message', this.chat)
                 .then((response) => {
                   console.log (response);

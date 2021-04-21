@@ -2,12 +2,11 @@
   <div class='v-header'>
     <div class="v-back"
      v-if="!isCoreRoute"
-     @click="routeBack"
-     >
+     @click="routeBack">
          <span> -Back- </span>
     </div>
     <div class="v-name" v-if="!isCoreRoute">
-        <span>{{this.AuthorizedUser}}</span>
+        <span>{{currentUserChat.Name}}</span>
     </div>
     <div class="right-side">
          <span>
@@ -20,17 +19,16 @@
 </template>
 
 <script>
- // import {mapState} from 'vuex'
- import VueCookies from 'vue-cookies';
+  import {mapState} from 'vuex'
+// import VueCookies from 'vue-cookies';
 
   export default {
     name: "v-header",
-   /* computed: {
+    computed: {
       ...mapState([
         'currentUserChat'
-      ]),*/
-      computed:{
-      isCoreRoute() {
+      ]),
+       isCoreRoute() {
         return this.$route.path === '/';
       },
      /* isCookie(){
@@ -41,7 +39,13 @@
       routeBack() {
         this.$router.go(-1);
       },
-        logout() {
+       logout: function () {
+              this.$store.dispatch('logout')
+              .then(() => {
+                this.$router.push('/login')
+              })
+            }
+      /*  logout() {
                      fetch("http://localhost:8080/logout", {
                                              method:"GET"
                      })
@@ -51,9 +55,10 @@
                      console.log(response,"logout++", VueCookies.isKey("Token"))
                      window.location = '/#/authorization'
                    })
-              },
+              },*/
     }
   }
+
 </script>
 
 <style>

@@ -4,8 +4,8 @@
 <main class="form-signin">
 <form @submit.prevent="submit">
          <h1 class="h3 mb-3 fw-normal">Please Authorize</h1>
-          <input v-model="User.Name" type="text" class="form-control" placeholder="Email address" required="" autofocus="">
-          <input v-model="User.Password" type="password" class="form-control" placeholder="Password" >
+          <input v-model="Name" type="text" class="form-control" placeholder="Email address" required="" autofocus="">
+          <input v-model="Password" type="password" class="form-control" placeholder="Password" >
 
          <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
 
@@ -19,26 +19,42 @@
     <div class="text-muted py-3">
         <a href="/#/registration">Registration</a>
     </div>
-    <p>{{this.AuthorizedUser}}</p>
+
     </main>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-import VueCookies from 'vue-cookies';
+//import axios from 'axios'
+//import VueCookies from 'vue-cookies';
 
 export default {
    data: () => ({
-      User: {
+      //User: {
        // Email: '',
         Name:'',
-        Password: '' //'123',
-      },
+        Password: '', //'123',
+    //  },
        link: [],
        errorMessage: null
     }),
-
+    mutations: {
+      auth_request(state){
+        state.status = 'loading'
+      },
+      auth_success(state, token, user){
+        state.status = 'success'
+        state.token = token
+        state.user = user
+      },
+      auth_error(state){
+        state.status = 'error'
+      },
+      logout(state){
+        state.status = ''
+        state.token = ''
+      },
+    },
     mounted() {
        fetch("http://localhost:8080/authorization")
          .then(response =>response.json())
@@ -49,7 +65,13 @@ export default {
 
       methods: {
         submit() {
-               axios.post(`http://localhost:8080/login`, {
+                let name = this.Name
+                let password = this.Password
+                this.$store.dispatch('login', { name, password })
+               .then(() => this.$router.push('/'))
+               .catch(err => console.log(err))
+
+              /* axios.post(`http://localhost:8080/login`, {
                    Name: this.User.Name,
                    Password: this.User.Password,
                    credentials: 'include',
@@ -64,7 +86,7 @@ export default {
                .catch(error => {
                    console.log("error", error.response.data);
                   // message = error.response.data
-               });
+               });*/
 
        },
       }

@@ -11,15 +11,37 @@
 
 <script>
   import vContact from './v-contact'
- // import {mapActions, mapState} from 'vuex'
-import axios from 'axios'
+  import {mapActions, mapState} from 'vuex'
+//import axios from 'axios'
 
   export default {
     name: "v-contact-list",
     components: {
       vContact
     },
-    data: function(){
+    computed: {
+          ...mapState([
+            'contacts'
+          ])
+        },
+        methods: {
+          ...mapActions([
+            'FETCH_CONTACTS',
+            'SET_USER_TO_HEADER'
+          ]),
+          toContactInfo(contact) {
+            this.$router.push({
+              name: 'contact',
+              query: {'id': contact.Id}
+            });
+            this.SET_USER_TO_HEADER(contact)
+          }
+        },
+        mounted() {
+          this.FETCH_CONTACTS()
+        }
+      }
+   /* data: function(){
         return {
         contacts: []
         }
@@ -40,7 +62,7 @@ import axios from 'axios'
                 console.log(this.contacts)
             })
     }
-  }
+  }*/
 </script>
 
 <style>
