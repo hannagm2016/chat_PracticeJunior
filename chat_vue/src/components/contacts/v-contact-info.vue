@@ -34,14 +34,13 @@
        },
        methods: {
          ...mapActions([
-           'FETCH_CHATS',
-           'SET_USER_TO_HEADER'
+           'FETCH_CHATS'
          ]),
          toUserChat() {
            this.chats.map((chat) => {
              if (chat.Id === this.contact_info.Id) {
                this.$router.push({
-                 name: 'user',
+                 name: 'chat',
                  params: {'messages': chat.Chat, 'user': chat},
                  query: {'id': this.contact_info.Id}
                })

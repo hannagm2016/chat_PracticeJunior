@@ -30,13 +30,9 @@
 
 export default {
    data: () => ({
-      //User: {
-       // Email: '',
         Name:'',
         Password: '', //'123',
-    //  },
-       link: [],
-       errorMessage: null
+        link: []
     }),
     mutations: {
       auth_request(state){
@@ -53,43 +49,30 @@ export default {
       logout(state){
         state.status = ''
         state.token = ''
+        state.user = ''
       },
     },
+      methods: {
+                    submit() {
+                      let Name = this.Name
+                      let Password = this.Password
+                      this.$store.dispatch('login', { Name, Password })
+
+                     .then(() => this.$router.push('/chat'),
+
+                   //   VueCookies.set('Token' , response.data.Token, '1d');
+                     )
+                     .catch(err => console.log(err))
+
+             },
+            },
     mounted() {
        fetch("http://localhost:8080/authorization")
          .then(response =>response.json())
          .then((data)=>{
           this.link = data;
          })
-     },
-
-      methods: {
-        submit() {
-                let name = this.Name
-                let password = this.Password
-                this.$store.dispatch('login', { name, password })
-               .then(() => this.$router.push('/'))
-               .catch(err => console.log(err))
-
-              /* axios.post(`http://localhost:8080/login`, {
-                   Name: this.User.Name,
-                   Password: this.User.Password,
-                   credentials: 'include',
-               })
-               .then(response => {
-                   this.AuthorizedUser=this.User.Name;
-                   console.log(this.AuthorizedUser,"____*___",response.data)
-                   this.errorMessage = null;
-                   VueCookies.set('Token' , response.data, '1d');
-                    window.location = '/#/chat'
-                      })
-               .catch(error => {
-                   console.log("error", error.response.data);
-                  // message = error.response.data
-               });*/
-
-       },
-      }
+     }
 }
 
 </script>

@@ -3,16 +3,25 @@
     <div class="v-back"
      v-if="!isCoreRoute"
      @click="routeBack">
-         <span> -Back- </span>
+         <span> Back </span>
+         <router-link :to="{name: 'contacts'}">
+                   <i class="link">Contacts</i>
+                 </router-link>
+
+                 <router-link :to="{name: 'chat'}">
+                   <i class="link">Chats</i>
+                 </router-link>
+
     </div>
-    <div class="v-name" v-if="!isCoreRoute">
-        <span>{{currentUserChat.Name}}</span>
+     <div class="v-name">
+
     </div>
     <div class="right-side">
-         <span>
+     <span>{{user}} </span>
+         <span v-if="isLoggedIn">
              <button @click="logout" class="btn btn-primary my-2">Logout</button>
         </span>
-         <a href="/#/authorization" class="btn btn-primary my-2">Authorization</a>
+         <a v-else href="/#/authorization" class="btn btn-primary my-2">Authorization</a>
      </div>
  </div>
 
@@ -26,15 +35,17 @@
     name: "v-header",
     computed: {
       ...mapState([
-        'currentUserChat'
+        'user'
       ]),
+      isLoggedIn : function()
+      { return this.$store.getters.isLoggedIn},
+       authUser : function()
+      { return this.$store.getters.authUser},
        isCoreRoute() {
+       console.log(this.user,"________")
         return this.$route.path === '/';
       },
-     /* isCookie(){
-        return VueCookies.isKey()
-      }*/
-    },
+     },
     methods: {
       routeBack() {
         this.$router.go(-1);
@@ -42,20 +53,9 @@
        logout: function () {
               this.$store.dispatch('logout')
               .then(() => {
-                this.$router.push('/login')
+                this.$router.push('/authorization')
               })
             }
-      /*  logout() {
-                     fetch("http://localhost:8080/logout", {
-                                             method:"GET"
-                     })
-                     .then (response => {
-
-                     VueCookies.remove("Token");
-                     console.log(response,"logout++", VueCookies.isKey("Token"))
-                     window.location = '/#/authorization'
-                   })
-              },*/
     }
   }
 
@@ -76,6 +76,7 @@
       z-index: 1;
       }
       .v-back {
+      margin: 10px;
         display: flex;
         align-items: center;
         flex-basis: 25%;
@@ -85,6 +86,9 @@
       }
       .right-side {
         flex-basis: 25%;
+      }
+      .link {
+      margin: 10px;
       }
 
 </style>

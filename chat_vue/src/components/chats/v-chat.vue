@@ -16,7 +16,6 @@
     </div>
 </div>
   <div class='v-user-chat'>
-<span>I'm {{this.AuthorizedUser}}</span>
 <span>{{name}}</span>
   <hr/>
     <v-message
@@ -43,22 +42,18 @@
 
 <script>
   import vMessage from './v-message'
- // import vUser from '../v-user'
-  import axios from 'axios'
   import {mapActions, mapState} from 'vuex'
 
   export default {
     name: "v-user-chat",
     components: {
       vMessage,
-   //   vUser
     },
 
     data() {
       return {
-      userId: null,
+      userTo: null,
       name: 'Please select contact to start chat',
-      //  chats:[],
         messages:[],
         connection: null,
         textValue: '',
@@ -68,31 +63,33 @@
     },
   computed: {
       ...mapState([
-        'chats'
-      ])
+        'chats',
+        'userId'
+       ])
     },
      mounted: function() {
           this.connectToWebsocket()
-      //    this.getChats()
-            this.FETCH_CHATS()
+          this.FETCH_CHATS()
+          this.defaultChat()
         },
     methods: {
-  /*  getChats() {
-         axios.get('http://localhost:8080/chats')
-           .then((response)=>  {
-               this.chats = response.data;
-               console.log(this.chats,"***")
-           })
-    },*/
+    defaultChat(){
+          this.messages = this.chats[0].Chat
+          this.userTo = this.chats[0].Id
+          this.name = this.chats[0].Name
+    },
+
      ...mapActions([
             'FETCH_CHATS',
             'SEND_MSG_TO_CHAT'
           ]),
     toUserChat(chat) {
-          console.log(chat,"++++", chat.Id)
           this.messages = chat.Chat
-            this.userId = chat.Id
+            this.userTo = chat.Id
             this.name = chat.Name
+           /* this.$router.push({
+            query: {'id': this.userTo}
+          });*/
           },
       sendMessage() {
         this.chat = {
@@ -104,19 +101,17 @@
                    }
                  ),
                  Text: this.textValue,
-                 UserId: this.userId,
+                 UserId: this.userTo,
                  Type: "own"
                }
                this.messages.push(this.chat)
-               console.log(this.chat, "*****")
             this.connection.send(this.chat.Text);
-           //  this.SEND_MSG_TO_CHAT({chat: this.chat})//добавить сохранение чата в vuex
-            axios.post('http://localhost:8080/message', this.chat)
+             this.SEND_MSG_TO_CHAT({chat: this.chat})
                 .then((response) => {
                   console.log (response);
                   this.textValue = ''
-                });
-                this.getChats()
+                })
+                 this.FETCH_CHATS()
       },
             connectToWebsocket() {
                    this.connection = new WebSocket( this.serverUrl);
@@ -128,8 +123,8 @@
                   },
 
               handleNewMessage(event) {
-              this.getChats();
-              console.log(event.data)
+               this.FETCH_CHATS()
+                console.log(event.data)
                //this.messages = this.chat.Chat
                 //  let data = event.data;
                //    data = data.split(/\r?\n/);

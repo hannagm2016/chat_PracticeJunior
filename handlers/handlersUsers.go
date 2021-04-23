@@ -25,13 +25,13 @@ type AccessToken struct {
 }
 
 func (h *handler) Login(c echo.Context) error {
-    var data map[string]string
-        if err:=c.Bind (&data); err !=nil {
+    var formdata map[string]string
+        if err:=c.Bind (&formdata); err !=nil {
             return err
         }
-        fmt.Println(data)
+        fmt.Println(formdata)
         var user models.Contact
-    user = h.ChatModel.FindCustomerByName(data["Name"])
+    user = h.ChatModel.FindCustomerByName(formdata["Name"])
      if user.Name == "" {
      fmt.Println("User not found")
         return c.JSON(http.StatusNotFound, "User not found")
@@ -56,25 +56,11 @@ Customer=user;
             HttpOnly: true,
         }
         c.SetCookie(&cookie)
-        fmt.Println(cookie,"*")
-    return c.JSON (http.StatusOK, token)
-}
-
-func (h *handler) User(c echo.Context) error {
-    cookie, err :=c.Cookie("jwt")
-    if err!=nil {
-        return c.JSON(http.StatusUnauthorized, "Unauthorized")
-    }
-    token, err := jwt.ParseWithClaims(cookie.Value, &jwt.StandardClaims{}, func(token *jwt.Token) (interface {}, error) {
-    return []byte(SecretKey), nil
-    })
-    if err!=nil {
-        return c.JSON(http.StatusUnauthorized, "Unauthorized")
-    }
-    claims := token.Claims.(*jwt.StandardClaims)
-    id, _ :=strconv.Atoi(claims.Issuer)
-    user := h.ChatModel.FindCustomerById(id)
-    return c.JSON(http.StatusOK, user)
+         var data models.BaseModel
+                  data.Token= token
+                  data.User= user
+      fmt.Println(data,"DAAAta")
+          return c.JSON (http.StatusOK, data)
 }
 
 func (h *handler) Logout(c echo.Context) error {
