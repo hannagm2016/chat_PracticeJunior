@@ -62,7 +62,10 @@ Customer=user;
       fmt.Println(data,"DAAAta")
           return c.JSON (http.StatusOK, data)
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> feature/VueEx
 
 func (h *handler) Logout(c echo.Context) error {
     cookie:= http.Cookie {

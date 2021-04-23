@@ -35,6 +35,12 @@ type Messages struct {
 }
 
 type BaseModel struct {
+<<<<<<< HEAD
 	Token string
 	User Contact
 	}
+=======
+	Token string `json:"token"`
+	User Contact `json:"user"`
+}
+>>>>>>> feature/VueEx
