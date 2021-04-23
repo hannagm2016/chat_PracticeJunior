@@ -77,6 +77,7 @@
           this.messages = this.chats[0].Chat
           this.userTo = this.chats[0].Id
           this.name = this.chats[0].Name
+
     },
 
      ...mapActions([

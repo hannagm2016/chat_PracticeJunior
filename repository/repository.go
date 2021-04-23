@@ -44,7 +44,7 @@ func (p *ChatModel) FindChats(currentUser float64) []models.Chats {
 		Msgs[index].Type = "own"
 		Messages = append(Messages, Msgs[index])
 	}
-	p.db.Raw("select con.* from (SELECT id, name FROM contacts where id !=?) as con join (SELECT DISTINCT  user_from_id user_id FROM messages  UNION SELECT DISTINCT user_to_id user_id from messages) as mes on con.id =mes.user_id", currentUser).Scan(&chats)
+	p.db.Raw("select mes.*, con.name from (select max(id) mes_id, o.user id, text, time from (SELECT id, user_from_id user, text, time FROM messages where user_to_id=? union SELECT id, user_to_id user, text, time FROM messages where user_from_id =?) o group by o.user) mes join (SELECT id, name FROM contacts) as con on mes.id=con.id order by mes_id desc", currentUser,currentUser).Scan(&chats)
 	//SELECT `name`, `time`, text` FROM `messages` GROUP BY `user_id` ORDER BY `id` DESC
 	//select distinct `o`.`user` from (SELECT `id`, `user_from_id` `user` FROM `messages` where `user_from_id` !=3 UNION SELECT`id`,`user_to_id` `user` from messages where `user_to_id`!=3 order by `id` desc) `o`
 	//   p.db.Raw("select con.* from (SELECT DISTINCT o.user from  (SELECT id, user_from_id user FROM messages where user_from_id !=? UNION SELECT id,user_to_id user from messages where user_to_id !=? order by id desc) o) mes  join  (SELECT id, name FROM contacts where id !=?) as con on mes.user=con.id", currentUser,currentUser,currentUser).Scan(&chats)
