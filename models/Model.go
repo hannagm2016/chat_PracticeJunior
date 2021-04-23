@@ -8,7 +8,8 @@ type Contact struct {
 	Id    float64
 	Name  string
 	Phone string
-	//Password    string
+	Password    []byte
+	Email string
 	Status string
 }
 type Chats struct {
@@ -33,3 +34,14 @@ type Messages struct {
 	Time       string
 	Text       string
 }
+
+type BaseModel struct {
+<<<<<<< HEAD
+	Token string
+	User Contact
+	}
+=======
+	Token string `json:"token"`
+	User Contact `json:"user"`
+}
+>>>>>>> feature/VueEx
