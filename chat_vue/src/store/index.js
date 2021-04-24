@@ -7,6 +7,7 @@ Vue.use(Vuex);
 let store = new Vuex.Store({
   state: {
     contacts: [],
+    ContactsFriend: [],
     chats: [],
     currentUserChat: {},
       status: '',
@@ -14,12 +15,16 @@ let store = new Vuex.Store({
       user : localStorage.getItem('user') || '',
       userId : localStorage.getItem('userId') || ''
   },
+  data: {
+
+  },
   mutations: {
     SET_CONTACTS_TO_STORE(state, contacts) {
       state.contacts = contacts;
     },
-    SET_CHATS_TO_STORE(state, chats) {
+    SET_CHATS_TO_STORE(state, chats, chatsf) {
       state.chats = chats;
+      state.ContactsFriend = chatsf;
     },
     SET_USER_TO_HEAD(state, user) {
       if (user) {
@@ -86,8 +91,17 @@ let store = new Vuex.Store({
       return axios.get('http://localhost:8080/contacts/'+this.state.userId)
         .then((contacts) => {
                 console.log(contacts.data)
+                let ContactsFriend= []
+                 contacts.data.map((contact) => {
+                   console.log(this.ContactsFriend,"***")
 
-          commit('SET_CONTACTS_TO_STORE', contacts.data)
+                    if (contact.Relation === "Friend") {
+                    console.log(contact,"____")
+                 ContactsFriend.push(contact)
+                    }
+                 })
+
+         commit('SET_CONTACTS_TO_STORE', contacts.data, ContactsFriend)
         })
     },
     FETCH_CHATS({commit}) {
@@ -116,12 +130,47 @@ chat.Time= new Date().toLocaleTimeString('en-US',
         .then((response) => {
           return response;
         })
+    },
+   SET_RELATION({commit}, {relation}) {
+   relation.UserId = Number(this.state.userId),
+   console.log (commit, relation, "tuituiuiuit")
+         return axios.put('http://localhost:8080/relations', relation)
+        .then((response) => {
+          return response;
+        })
+    },
+    DELETE_RELATION({commit}, {relation}) {
+   relation.UserId = Number(this.state.userId),
+   console.log (commit, relation)
+         return axios.delete('http://localhost:8080/relations',{data: relation})
+        .then((response) => {
+          return response;
+        })
+    },
+    CHANGE_RELATION({commit}, {relation}) {
+   relation.UserId = Number(this.state.userId),
+   console.log (commit, relation, "tuituiuiuit")
+         return axios.post('http://localhost:8080/relations', relation)
+        .then((response) => {
+          return response;
+        })
     }
   },
+     isLoggedIn : function()
+        { return this.$store.getters.isLoggedIn},
+
    getters : {
      isLoggedIn: state => !!state.token,
      authStatus: state => state.status,
-     authUser: state => !!state.user
+     contactFriends: state =>{
+        return state.contacts.filter(contact =>contact.Relation==="Friend")
+     },
+      contactBlocked: state =>{
+        return state.contacts.filter(contact =>contact.Relation==="Blocked")
+     },
+      contactNone: state =>{
+        return state.contacts.filter(contact =>contact.Relation==="")
+     }
    }
 })
 

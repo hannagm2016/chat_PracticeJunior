@@ -23,6 +23,9 @@ type ChatModelImpl interface {
     	FindCustomerById(userId int) models.Contact
     	FindCustomerByEmail(email string) models.Contact
     	FindCustomerId(name string) float64
+    	SetRelation(relation models.Relations)
+    	DeleteRelation(relation models.Relations)
+    	ChangeRelation(relation models.Relations)
 }
 
 func NewChatModel(db *gorm.DB) *ChatModel {
@@ -64,7 +67,7 @@ func (p *ChatModel) FindChat(UserId float64) []models.Message {
 }
 func (p *ChatModel) FindContacts(userId float64) []models.Contact {
 	contacts := []models.Contact{}
-	p.db.Raw("select con.*, rel.relation from (SELECT id, name, phone, email, status FROM `contacts` where id !=?) con left join (select relation, userTo from relations where userId=?) rel on con.Id= rel.userTo", userId,userId).Scan(&contacts)
+	p.db.Raw("select con.*, rel.relation from (SELECT id, name, phone, email, status FROM `contacts` where id !=?) con left join (select relation, user_to from relations where user_id=?) rel on con.Id= rel.user_to", userId,userId).Scan(&contacts)
 	//p.db.Where("id <> ?", userId).Find(&contacts)
 	return contacts
 }
@@ -77,4 +80,14 @@ func (p *ChatModel) FindContact(UserId float64) models.Contact {
 func (p *ChatModel) SaveMessage(message models.Messages) {
 	p.db.Create(&message)
 
+}
+func (p *ChatModel) SetRelation(relation models.Relations) {
+	p.db.Create(&relation)
+}
+func (p *ChatModel) DeleteRelation(relation models.Relations) {
+
+	p.db.Where("user_id = ? and user_to = ?", relation.UserId, relation.UserTo).Delete(&relation)
+}
+func (p *ChatModel) ChangeRelation(relation models.Relations) {
+	p.db.Model(&relation).Where("user_id = ? and user_to = ?", relation.UserId, relation.UserTo).Update("Relation", relation.Relation)
 }

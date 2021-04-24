@@ -39,8 +39,7 @@
       ]),
       isLoggedIn : function()
       { return this.$store.getters.isLoggedIn},
-       authUser : function()
-      { return this.$store.getters.authUser},
+
        isCoreRoute() {
         return this.$route.path === '/';
       },

@@ -1,25 +1,37 @@
 <template>
-<div>
 
+<div>
   <div class='v-contact-list'>
   <div class='friends'>
   <span>Friends</span>
-  </div>
     <v-contact
-        v-for="contact in contacts"
+        v-for="contact in contactFriends"
         :key="contact.id"
         :contact_data="contact"
         @to-contact-info="toContactInfo(contact)"
     />
+    </div>
      <div class='black_list'>
           <span>Black List</span>
+           <v-contact
+                  v-for="contact in contactBlocked"
+                  :key="contact.id"
+                  :contact_data="contact"
+                  @to-contact-info="toContactInfo(contact)"
+              />
+     </div>
+       <div class='other_list'>
+               <span>all Others</span>
+                <v-contact
+                       v-for="contact in contactNone"
+                       :key="contact.id"
+                       :contact_data="contact"
+                       @to-contact-info="toContactInfo(contact)"
+                   />
           </div>
   </div>
-
       <v-contact-user-info/>
-
 </div>
-
 </template>
 
 <script>
@@ -36,7 +48,16 @@
     computed: {
           ...mapState([
             'contacts'
-          ])
+          ]),
+           contactFriends() {
+                  return this.$store.getters.contactFriends
+           },
+           contactBlocked() {
+                  return this.$store.getters.contactBlocked
+           },
+           contactNone() {
+                  return this.$store.getters.contactNone
+           }
         },
         methods: {
           ...mapActions([
@@ -54,6 +75,7 @@
         },
         mounted() {
           this.FETCH_CONTACTS()
+
         }
       }
 </script>

@@ -66,3 +66,34 @@ id := c.Param("userId")
 
 	return c.JSON(http.StatusOK, message)
 }
+func (h *handler) SetRelation(c echo.Context) error {
+	var rel models.Relations
+	if err := c.Bind(&rel); err != nil {
+    		fmt.Println(err)
+    		return err
+    	}
+    		fmt.Println("Endpoint Hit: SetRelation", rel)
+
+
+	h.ChatModel.SetRelation(rel)
+
+	return c.JSON(http.StatusOK, rel)
+}
+func (h *handler) ChangeRelation(c echo.Context) error {
+	var rel models.Relations
+	if err := c.Bind(&rel); err != nil {
+    		return err
+    	}
+    		fmt.Println("Endpoint Hit: ChangeRelation", rel)
+	h.ChatModel.ChangeRelation(rel)
+	return c.JSON(http.StatusOK, rel)
+}
+func (h *handler) DeleteRelation(c echo.Context) error {
+	var rel models.Relations
+	if err := c.Bind(&rel); err != nil {
+    		return err
+    	}
+    		fmt.Println("Endpoint Hit: DeleteRelation", rel)
+	h.ChatModel.DeleteRelation(rel)
+	return c.JSON(http.StatusOK, rel)
+}

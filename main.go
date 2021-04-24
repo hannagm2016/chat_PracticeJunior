@@ -31,6 +31,9 @@ func main() {
 	e.GET("/FBLogin", h.FBLogin)
 	e.GET("/GoogleLogin", h.GoogleLogin)
 	e.POST("/login", h.Login)
+	e.PUT("/relations", h.SetRelation)
+	e.DELETE("/relations", h.DeleteRelation)
+	e.POST("/relations", h.ChangeRelation)
 	e.POST("/registrationPost", h.RegistrationPost)
 
 	e.Logger.Fatal(e.Start(":8080"))

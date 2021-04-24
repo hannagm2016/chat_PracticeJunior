@@ -40,4 +40,8 @@ type BaseModel struct {
 	Token string `json:"token"`
 	User Contact `json:"user"`
 }
+type Relations struct{
+    Relation string
+    UserId, UserTo float64
+}
 

@@ -4,13 +4,17 @@
     <div class="info__avatar"></div>
       <div class="info__name">
            <span>{{contact_info.Name}}<br/></span>
+           <span>{{contact_info.Relation}}<br/></span>
            <span>{{contact_info.Phone}}</span>
+           <span>{{contact_info.Email}}</span>
       </div>
    </div>
       <div class="info__tools">
-        <button class="social">Add to Black list</button>
-        <button class="social">Add to Friends List</button>
-        <button class="start-chat" @click="checkChats">
+        <button v-if="contact_info.Relation == 'Friend'" class="social" @click="addToBlackList">Add to Black list</button>
+        <button v-if="contact_info.Relation == ''" class="social" @click="addToFriendsList">Add to Friends List</button>
+        <button v-if="contact_info.Relation == 'Friend'" class="social" @click="removeFriendsList">Remove from Friends List</button>
+        <button v-if="contact_info.Relation == 'Blocked'" class="social" @click="removeBlackToFriends">Remove from Black to Friends</button>
+        <button v-if="contact_info.Relation != 'Blocked'" class="start-chat" @click="checkChats">
           Start chat
         </button>
       </div>
@@ -35,8 +39,40 @@
        methods: {
          ...mapActions([
           'FETCH_CHATS',
-          'SEND_MSG_TO_CHAT'
+          'FETCH_CONTACTS',
+          'SEND_MSG_TO_CHAT',
+          'SET_RELATION',
+          'DELETE_RELATION',
+          'CHANGE_RELATION'
          ]),
+         addToBlackList(){
+               let rel={Relation: "Blocked",
+                UserTo: this.contact_info.Id}
+                console.log(rel),
+                this.CHANGE_RELATION({relation: rel})
+                this.FETCH_CONTACTS()
+         },
+         addToFriendsList(){
+            let rel={Relation: "Friend",
+             UserTo: this.contact_info.Id}
+             console.log(rel),
+             this.SET_RELATION({relation: rel}),
+             this.FETCH_CONTACTS()
+         },
+          removeFriendsList(){
+            let rel={
+             UserTo: this.contact_info.Id}
+             console.log(rel),
+             this.DELETE_RELATION({relation: rel})
+             this.FETCH_CONTACTS()
+         },
+          removeBlackToFriends(){
+            let rel={Relation: "Friend",
+             UserTo: this.contact_info.Id}
+             console.log(rel),
+             this.CHANGE_RELATION({relation: rel})
+             this.FETCH_CONTACTS()
+         },
          checkChats() {
            this.chats.map((chat) => {
              if (chat.Id === this.contact_info.Id) {

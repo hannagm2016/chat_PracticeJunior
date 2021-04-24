@@ -93,8 +93,7 @@
           },
       sendMessage() {
         this.chat = {
-
-                 Text: this.textValue,
+                  Text: this.textValue,
                  UserId: this.userTo,
                  Type: "own"
                }
