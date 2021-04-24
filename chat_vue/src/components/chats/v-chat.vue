@@ -5,10 +5,10 @@
           v-for="chat in chats"
           :key="chat.Id"
       >
-      <div v-if="chat.Chat!=null" class='v-user' @click="toUserChat(chat)">
+      <div  class='v-user' @click="toUserChat(chat)">
           <div class="v-user__avatar"></div>
           <div class="v-user__info">
-            <p class="info__name">{{chat.Name}}</p>
+            <p class="info">{{chat.Name}}</p>
             <p class="info__last-message">{{chat.Chat[chat.Chat.length-1].Text}}</p>
           </div>
           <div class="v-user__time">{{chat.Chat[chat.Chat.length-1].Time}}</div>
@@ -93,13 +93,7 @@
           },
       sendMessage() {
         this.chat = {
-                 Time: new Date().toLocaleTimeString('en-US',
-                   {
-                     hour12: false,
-                     hour: "numeric",
-                     minute: "numeric"
-                   }
-                 ),
+
                  Text: this.textValue,
                  UserId: this.userTo,
                  Type: "own"
@@ -196,7 +190,7 @@
     max-width: 170px;
     flex-basis: 50%;
   }
-    .info__name {
+    .info {
       font-weight: bold;
     }
     .info__last-message {

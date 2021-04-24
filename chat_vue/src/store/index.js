@@ -104,6 +104,14 @@ let store = new Vuex.Store({
     },*/
    SEND_MSG_TO_CHAT({commit}, {chat}) {
    console.log (commit, chat, "tuituiuiuit")
+chat.Time= new Date().toLocaleTimeString('en-US',
+                       {
+                         hour12: false,
+                         hour: "numeric",
+                         minute: "numeric"
+                       }
+                     )
+
       return axios.post('http://localhost:8080/message/'+ this.state.userId, chat)
         .then((response) => {
           return response;

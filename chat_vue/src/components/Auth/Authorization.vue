@@ -72,33 +72,7 @@ export default {
          .then((data)=>{
           this.link = data;
          })
-<<<<<<< HEAD
-     },
-
-      methods: {
-        submit() {
-               axios.post(`http://localhost:8080/login`, {
-                   Name: this.User.Name,
-                   Password: this.User.Password,
-                   credentials: 'include',
-               })
-               .then(response => {
-                   this.AuthorizedUser=this.User.Name;
-                   console.log(this.AuthorizedUser,"____*___",response.data.Token)
-                   this.errorMessage = null;
-                   VueCookies.set('Token' , response.data.Token, '1d');
-                    window.location = '/#/chat'
-                      })
-               .catch(error => {
-                   console.log("error", error.response.data);
-                  // message = error.response.data
-               });
-
-       },
-      }
-=======
-     }
->>>>>>> feature/VueEx
+}
 }
 
 </script>

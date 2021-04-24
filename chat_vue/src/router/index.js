@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import store from '../store/index.js'
 
 import vContactList from '../components/contacts/v-contact-list'
-import vContactUserInfo from '../components/contacts/v-contact-info'
+import vMyProfile from '../components/contacts/v-contact-info'
 import vChat from '../components/chats/v-chat'
 import Authorization from '@/components/Auth/Authorization'
 import Registration from '@/components/Auth/Registration'
@@ -32,14 +32,18 @@ let router = new Router({
   routes: [
     {
       path: '/',
-      name: 'contact',
-      component: vContactUserInfo,
-      props: true
+      name: 'myProfile',
+      component: vMyProfile,
+        meta: {
+                          requiresAuth: true
+                        }
     },
     {
       path: '/contacts',
       name: 'contacts',
       component: vContactList,
+            props: true,
+
          meta: {
                     requiresAuth: true
                   }

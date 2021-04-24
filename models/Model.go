@@ -11,6 +11,7 @@ type Contact struct {
 	Password    []byte
 	Email string
 	Status string
+	Relation string
 }
 type Chats struct {
 	Id float64
@@ -35,12 +36,8 @@ type Messages struct {
 }
 
 type BaseModel struct {
-<<<<<<< HEAD
-	Token string
-	User Contact
-	}
-=======
+
 	Token string `json:"token"`
 	User Contact `json:"user"`
 }
->>>>>>> feature/VueEx
+

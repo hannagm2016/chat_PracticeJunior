@@ -4,7 +4,7 @@
      v-if="!isCoreRoute"
      @click="routeBack">
          <span> Back </span>
-         <router-link :to="{name: 'contacts'}">
+         <router-link to="contacts">
                    <i class="link">Contacts</i>
                  </router-link>
 
@@ -42,7 +42,6 @@
        authUser : function()
       { return this.$store.getters.authUser},
        isCoreRoute() {
-       console.log(this.user,"________")
         return this.$route.path === '/';
       },
      },
