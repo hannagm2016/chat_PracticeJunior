@@ -4,6 +4,7 @@
      v-if="!isCoreRoute"
      @click="routeBack">
          <span> Back </span>
+     </div>
          <router-link to="contacts">
                    <i class="link">Contacts</i>
                  </router-link>
@@ -12,7 +13,6 @@
                    <i class="link">Chats</i>
                  </router-link>
 
-    </div>
      <div class="v-name">
 
     </div>

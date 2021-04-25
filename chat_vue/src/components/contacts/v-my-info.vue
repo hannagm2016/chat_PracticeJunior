@@ -1,23 +1,23 @@
 <template>
-  <div class='v-contact-info' v-if="contact_info" >
+  <div class='v-my-info'>
   <div class="info__content">
     <div class="info__avatar"></div>
       <div class="info__name">
-           <span>{{contact_info.Name}}<br/></span>
-           <span>{{contact_info.Relation}}<br/></span>
-           <span>{{contact_info.Phone}}</span>
-           <span>{{contact_info.Email}}</span>
+          <form @submit.prevent="submit">
+                   <h1 class="h3 mb-3 fw-normal">Edit your profile</h1>
+                    <input v-model="Name" type="text" class="form-control" placeholder="Ann"  autofocus="">
+                    <input v-model="Phone" type="text" class="form-control" placeholder="911">
+                    <input v-model="Email" type="email" class="form-control" placeholder="ann@n.com" >
+                    <input v-model="Password" type="password" class="form-control" placeholder="***" >
+                   <button class="w-100 btn btn-lg btn-primary" type="submit">Save</button>
+          </form>
+
       </div>
    </div>
-      <div class="info__tools">
-        <button v-if="contact_info.Relation == 'Friend'" class="social" @click="addToBlackList">Add to Black list</button>
-        <button v-if="contact_info.Relation == ''" class="social" @click="addToFriendsList">Add to Friends List</button>
-        <button v-if="contact_info.Relation == 'Friend'" class="social" @click="removeFriendsList">Remove from Friends List</button>
-        <button v-if="contact_info.Relation == 'Blocked'" class="social" @click="removeBlackToFriends">Remove from Black to Friends</button>
-        <button v-if="contact_info.Relation != 'Blocked'" class="start-chat" @click="checkChats">
-          Start chat
-        </button>
-      </div>
+      <!--<div class="hidden">
+        <button  class="social" @click="EditProfile">Edit profile</button>
+        <button  class="social" @click="SaveChanges">Save profile changes</button>
+      </div>-->
     </div>
 </template>
 
@@ -119,23 +119,22 @@
 </script>
 
 <style>
-.v-contact-info{
+.v-my-info{
     display: block;
-    padding-left: 350px;
+    width:50%;
     top:4rem;
-    margin-bottom: 200px;
+margin: 0 25%;
   }
   .info__avatar {
       position: fixed;
-         width: 200px;
-         height: 200px;
+         width: 300px;
+         height: 300px;
          background: #e7e7e7;
          border-radius: 50%;
   }
   .info__name{
    height: 200px;
-       padding-left: 200px;
-       align-items: center;
+       padding-left: 350px;
 
   }
 .start-chat {
