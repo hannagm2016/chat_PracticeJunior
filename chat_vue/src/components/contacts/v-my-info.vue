@@ -1,7 +1,7 @@
 <template>
   <div class='v-my-info'>
   <div class="info__content">
-    <div class="info__avatar"></div>
+    <div class="info_avatar"></div>
       <div class="info__name">
           <form @submit.prevent="UpdateInfo">
                    <h1 class="h3 mb-3 fw-normal">Edit your profile: </h1>
@@ -76,7 +76,7 @@
 <style>
 .v-my-info{
     display: block;
-    width: 85%;
+    width: 75%;
     top: 4rem;
     margin: 0 10%;
   }
@@ -88,7 +88,7 @@
   }
   .info__name{
    height: 200px;
-   padding-left: 350px;
+   padding-left: 250px;
   }
 .social {
   background: forestgreen;

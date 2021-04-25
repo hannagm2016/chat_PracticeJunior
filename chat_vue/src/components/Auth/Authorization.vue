@@ -58,10 +58,9 @@ export default {
                       let Password = this.Password
                       this.$store.dispatch('login', { Name, Password })
 
-                     .then(() => this.$router.push('/contacts'),
-
-                   //   VueCookies.set('Token' , response.data.Token, '1d');
-                     )
+                     .then((response) => {
+                     this.$router.push('/')
+                     })
                      .catch(err => console.log(err))
 
              },

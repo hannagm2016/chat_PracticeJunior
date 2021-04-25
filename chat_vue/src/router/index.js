@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../store/index.js'
+import 'material-design-icons-iconfont'
 
 import vContactList from '../components/contacts/v-contact-list'
 import vMyProfile from '../components/contacts/v-my-info'

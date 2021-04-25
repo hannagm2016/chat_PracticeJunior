@@ -1,8 +1,8 @@
 <template>
-  <div class='v-contact-info' v-if="contact_info" >
+  <div class='v-contact-info' v-if="contact_info.Name" >
   <div class="info__content">
-    <div class="info__avatar"></div>
-      <div class="info__name">
+    <div class="info_avatar"></div>
+      <div class="info_name">
            <span>{{contact_info.Name}}<br/></span>
            <span>{{contact_info.Relation}}<br/></span>
            <span>{{contact_info.Phone}}</span>
@@ -14,7 +14,7 @@
         <button v-if="contact_info.Relation == ''" class="social" @click="addToFriendsList">Add to Friends List</button>
         <button v-if="contact_info.Relation == 'Friend'" class="social" @click="removeFriendsList">Remove from Friends List</button>
         <button v-if="contact_info.Relation == 'Blocked'" class="social" @click="removeBlackToFriends">Remove from Black to Friends</button>
-        <button v-if="contact_info.Relation != 'Blocked'" class="start-chat" @click="checkChats">
+        <button v-if="contact_info.Relation == 'Friend'" class="start-chat" @click="checkChats">
           Start chat
         </button>
       </div>
@@ -109,7 +109,6 @@
        },
        watch: {
            $route(to, from) {
-                console.log (to, from)
                 this.contact_info = this.$route.params.contact
            }
      }
@@ -136,14 +135,14 @@
     top:4rem;
     margin-bottom: 200px;
   }
-  .info__avatar {
+  .info_avatar {
       position: fixed;
          width: 200px;
          height: 200px;
          background: #e7e7e7;
          border-radius: 50%;
   }
-  .info__name{
+  .info_name{
    height: 200px;
        padding-left: 200px;
        align-items: center;

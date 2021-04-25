@@ -81,7 +81,6 @@ let store = new Vuex.Store({
        logout({commit}){
         return new Promise((resolve, reject) => {
           commit('logout')
-          console.log(reject, "%%%%%", this.state.user)
           localStorage.removeItem('token')
           localStorage.removeItem('user')
           localStorage.removeItem('userId')
@@ -104,10 +103,9 @@ let store = new Vuex.Store({
     FETCH_CHATS({commit}) {
       return axios.get('http://localhost:8080/chats/'+this.state.userId)
         .then((chats) => {
-        console.log(chats.data)
-          commit('SET_CHATS_TO_STORE', chats.data),
-                    console.log(this.state.token, "UUUUser", this.state.user)
-
+       // console.log(chats.data)
+          commit('SET_CHATS_TO_STORE', chats.data)
+           //         console.log(this.state.token, "UUUUser", this.state.user)
         })
     },
    /* SET_USER_TO_HEADER({commit}, user) {
@@ -131,9 +129,9 @@ chat.Time= new Date().toLocaleTimeString('en-US',
      SEND_MY_INFO({commit}, {myContact}) {
   // myContact.Id = this.state.userId
       console.log (myContact, commit)
+      this.state.user= myContact.Name
    return axios.post('http://localhost:8080/updateinfo/'+ this.state.userId, myContact)
         .then((response) => {
-          this.state.userId= myContact.Name
           return response
         })
     },

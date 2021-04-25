@@ -119,10 +119,10 @@
               handleNewMessage(event) {
                this.FETCH_CHATS()
                 console.log(event.data)
-               //this.messages = this.chat.Chat
+              // this.messages = this.chat.Chat
                 //  let data = event.data;
                //    data = data.split(/\r?\n/);
-               //    this.messages.push({Text: event.data});
+                //   this.messages.push({Text: event.data});
                   }
     }
   }

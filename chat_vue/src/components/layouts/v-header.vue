@@ -3,23 +3,30 @@
     <div class="v-back"
      v-if="!isCoreRoute"
      @click="routeBack">
+      <i class="material-icons">keyboard_arrow_left</i>
          <span> Back </span>
      </div>
-         <router-link to="contacts">
-                   <i class="link">Contacts</i>
-                 </router-link>
+     <div class='v-link'>
+       <router-link to="contacts">
+       <i class="material-icons">call</i>
+       <span class="mr-3">Contacts</span>
+       </router-link>
 
-                 <router-link :to="{name: 'chat'}">
-                   <i class="link">Chats</i>
-                 </router-link>
-
+      <router-link :to="{name: 'chat'}">
+      <i class="material-icons">chat</i>
+      <span class="mr-3">Chats</span>
+      </router-link>
+</div>
      <div class="v-name">
-
+  <router-link :to="{name: 'myProfile'}">
+          <span>{{user}}</span>
+           <i class="material-icons">person_pin</i>
+        </router-link>
     </div>
     <div class="right-side">
-     <a href="/">{{user}} </a>
+
          <span v-if="isLoggedIn">
-             <button @click="logout" class="btn btn-primary my-2">Logout</button>
+             <button @click="logout" class="btn btn-primary my-2 ml-2">Logout</button>
         </span>
          <a v-else href="/#/authorization" class="btn btn-primary my-2">Authorization</a>
      </div>
@@ -65,7 +72,6 @@
       height: 50px;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
       padding: 8px;
       background: grey;
       position: fixed;
@@ -75,19 +81,22 @@
       z-index: 1;
       }
       .v-back {
-      margin: 10px;
+         margin: 10px;
         display: flex;
         align-items: center;
-        flex-basis: 25%;
+        flex-basis: 15%;
       }
       .v-name {
-        flex-basis: 50%;
+        flex-basis: 10%;
       }
       .right-side {
-        flex-basis: 25%;
+        flex-basis: 10%;
+
       }
-      .link {
-      margin: 10px;
+      .v-link {
+ text-align: start;
+      flex-basis: 65%;
+
       }
 
 </style>
