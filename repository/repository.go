@@ -13,7 +13,9 @@ type ChatModel struct {
 var chats []models.Chats
 
 type ChatModelImpl interface {
-	FindContact(id float64) models.Contact
+	//MyContact(id float64) models.Contact
+	FindContact(userId float64) models.Contact
+	UpdateMyContact(contact models.Contact, userId float64) models.Contact
 	FindContacts(userId float64) []models.Contact
 	FindChat(UserId float64) []models.Message
 	FindChats(Uid float64) []models.Chats
@@ -36,13 +38,12 @@ func NewChatModel(db *gorm.DB) *ChatModel {
 func (p *ChatModel) FindChats(currentUser float64) []models.Chats {
 	Msgs := []models.Message{}
 	Messages := []models.Message{}
-	  // тут будет ид текущего юзера
-	p.db.Raw("SELECT id, user_from_id as user_id, text, time FROM messages where user_to_id = ?", currentUser).Scan(&Msgs) //пока возвращает первое сообщение
+	p.db.Raw("SELECT id, user_from_id as user_id, text, time FROM messages where user_to_id = ?", currentUser).Scan(&Msgs)
 	for index, _ := range Msgs {
 		Msgs[index].Type = "others"
 	}
 	Messages = Msgs
-	p.db.Raw("SELECT id, user_to_id as user_id, text, time FROM messages where user_from_id = ?", currentUser).Scan(&Msgs) //пока возвращает первое сообщение
+	p.db.Raw("SELECT id, user_to_id as user_id, text, time FROM messages where user_from_id = ?", currentUser).Scan(&Msgs)
 	for index, _ := range Msgs {
 		Msgs[index].Type = "own"
 		Messages = append(Messages, Msgs[index])
@@ -75,6 +76,13 @@ func (p *ChatModel) FindContacts(userId float64) []models.Contact {
 func (p *ChatModel) FindContact(UserId float64) models.Contact {
 	contact := models.Contact{}
 	p.db.Find(&contact, "id = ?", UserId)
+	return contact
+}
+func (p *ChatModel) UpdateMyContact(contact models.Contact, userId float64) models.Contact {
+	//contact := models.Contact{}
+	//p.db.Save(&contact)
+	p.db.Model(&contact).Where("id=?", userId).Updates(models.Contact{Email:contact.Email, Name:contact.Name, Phone:contact.Phone, Password:contact.Password})
+	//p.db.Find(&contact, "id = ?", UserId)
 	return contact
 }
 

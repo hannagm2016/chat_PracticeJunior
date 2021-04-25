@@ -20,11 +20,22 @@ func (h *handler) Contacts(c echo.Context) error {
 	return c.JSON(http.StatusOK, Customers)
 }
 
-func (h *handler) SingleCustomer(c echo.Context) error {
-	id := c.Param("id")
+func (h *handler) MyContact(c echo.Context) error {
+	id := c.Param("userId")
 	key, _ := strconv.ParseFloat(string(id), 64)
 	contact := h.ChatModel.FindContact(key)
-	fmt.Println("Endpoint Hit: ReturnCustomer details- ", id)
+	fmt.Println("Endpoint Hit: ReturnCustomer details- ", contact)
+	return c.JSON(http.StatusOK, contact)
+}
+func (h *handler) UpdateMyContact(c echo.Context) error {
+var cont models.Contact
+	if err := c.Bind(&cont); err != nil {
+		return err
+	}
+	id := c.Param("userId")
+	key, _ := strconv.ParseFloat(string(id), 64)
+	contact := h.ChatModel.UpdateMyContact(cont, key)
+	fmt.Println("Endpoint Hit: UpdateMyContact details- ", contact, key)
 	return c.JSON(http.StatusOK, contact)
 }
 

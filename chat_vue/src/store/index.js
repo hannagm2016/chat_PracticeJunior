@@ -7,7 +7,7 @@ Vue.use(Vuex);
 let store = new Vuex.Store({
   state: {
     contacts: [],
-    ContactsFriend: [],
+    myContact:{},
     chats: [],
     currentUserChat: {},
       status: '',
@@ -15,16 +15,15 @@ let store = new Vuex.Store({
       user : localStorage.getItem('user') || '',
       userId : localStorage.getItem('userId') || ''
   },
-  data: {
-
-  },
   mutations: {
     SET_CONTACTS_TO_STORE(state, contacts) {
       state.contacts = contacts;
     },
-    SET_CHATS_TO_STORE(state, chats, chatsf) {
-      state.chats = chats;
-      state.ContactsFriend = chatsf;
+    SET_MYCONTACTS_TO_STORE(state, myContact) {
+      state.myContact = myContact;
+    },
+    SET_CHATS_TO_STORE(state, chats) {
+      state.chats = chats
     },
     SET_USER_TO_HEAD(state, user) {
       if (user) {
@@ -49,6 +48,8 @@ let store = new Vuex.Store({
         state.status = ''
         state.token = ''
         state.user = ''
+        state.userId = ''
+
       }
   },
   actions: {
@@ -65,7 +66,7 @@ let store = new Vuex.Store({
             localStorage.setItem('user', user)
             localStorage.setItem('userId', userId)
             console.log(localStorage, "hhhhhhhh", userId)
-            axios.defaults.headers.common['Authorization'] = token
+          //  axios.defaults.headers.common['Authorization'] = token
             axios.defaults.headers.common['Authorization'] = user
             commit('auth_success', token, user, userId)
             resolve(resp)
@@ -83,6 +84,7 @@ let store = new Vuex.Store({
           console.log(reject, "%%%%%", this.state.user)
           localStorage.removeItem('token')
           localStorage.removeItem('user')
+          localStorage.removeItem('userId')
           delete axios.defaults.headers.common['Authorization']
           resolve()
         })
@@ -90,20 +92,15 @@ let store = new Vuex.Store({
     FETCH_CONTACTS({commit}) {
       return axios.get('http://localhost:8080/contacts/'+this.state.userId)
         .then((contacts) => {
-                console.log(contacts.data)
-                let ContactsFriend= []
-                 contacts.data.map((contact) => {
-                   console.log(this.ContactsFriend,"***")
-
-                    if (contact.Relation === "Friend") {
-                    console.log(contact,"____")
-                 ContactsFriend.push(contact)
-                    }
-                 })
-
-         commit('SET_CONTACTS_TO_STORE', contacts.data, ContactsFriend)
+         commit('SET_CONTACTS_TO_STORE', contacts.data)
         })
     },
+        FETCH_MY_CONTACT({commit}) {
+      return axios.get('http://localhost:8080/mycontact/'+this.state.userId)
+        .then((myContact) => {
+         commit('SET_MYCONTACTS_TO_STORE', myContact.data)
+         })
+      },
     FETCH_CHATS({commit}) {
       return axios.get('http://localhost:8080/chats/'+this.state.userId)
         .then((chats) => {
@@ -129,6 +126,15 @@ chat.Time= new Date().toLocaleTimeString('en-US',
       return axios.post('http://localhost:8080/message/'+ this.state.userId, chat)
         .then((response) => {
           return response;
+        })
+    },
+     SEND_MY_INFO({commit}, {myContact}) {
+  // myContact.Id = this.state.userId
+      console.log (myContact, commit)
+   return axios.post('http://localhost:8080/updateinfo/'+ this.state.userId, myContact)
+        .then((response) => {
+          this.state.userId= myContact.Name
+          return response
         })
     },
    SET_RELATION({commit}, {relation}) {
@@ -160,7 +166,7 @@ chat.Time= new Date().toLocaleTimeString('en-US',
         { return this.$store.getters.isLoggedIn},
 
    getters : {
-     isLoggedIn: state => !!state.token,
+     isLoggedIn: state => !!state.user,
      authStatus: state => state.status,
      contactFriends: state =>{
         return state.contacts.filter(contact =>contact.Relation==="Friend")

@@ -74,27 +74,38 @@
              this.FETCH_CONTACTS()
          },
          checkChats() {
+                 if (!this.chats.length) {
+                   this.FETCH_CHATS()
+                     .then(() => {
+                       this.toUserChat()
+                     })
+                 } else {
+                   this.toUserChat()
+                 }
+               },
+         toUserChat() {
+         let index=false
            this.chats.map((chat) => {
              if (chat.Id === this.contact_info.Id) {
-                 console.log (chat, "HHHH", this.contact_info.Id)
+             index=true
+                 console.log (chat, "HHHH", this.contact_info.Id, index)}
+                 })
+                 if (!index) {
               this.chat = {
               Text: 'hi, '+this.contact_info.Name,
               UserId: this.contact_info.Id,
               Type: "own"
               }
+              console.log(this.chat, "UUUUUUU")
+              this.SEND_MSG_TO_CHAT({chat: this.chat})
               }
-              })
-              if (this.chat.Text !='') {
-          //  this.SEND_MSG_TO_CHAT({chat: this.chat})
-             console.log (this.chat, "HHHH", this.contact_info.Id)
-}
-             console.log("OOOOO")
+             console.log("OOOOO"),
              this.$router.push({
              name: 'chat',
             // params: {'messages': chat.Chat, 'user': chat},
            // query: {'id': this.contact_info.Id}
                 })
-             }
+           }
        },
        watch: {
            $route(to, from) {

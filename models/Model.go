@@ -11,7 +11,7 @@ type Contact struct {
 	Password    []byte
 	Email string
 	Status string
-	Relation string
+	Relation string `gorm:"-"`
 }
 type Chats struct {
 	Id float64

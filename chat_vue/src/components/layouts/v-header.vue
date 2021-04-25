@@ -17,7 +17,7 @@
 
     </div>
     <div class="right-side">
-     <span>{{user}} </span>
+     <a href="/">{{user}} </a>
          <span v-if="isLoggedIn">
              <button @click="logout" class="btn btn-primary my-2">Logout</button>
         </span>
@@ -35,13 +35,14 @@
     name: "v-header",
     computed: {
       ...mapState([
-        'user'
+        'user',
+        'token'
       ]),
       isLoggedIn : function()
       { return this.$store.getters.isLoggedIn},
 
        isCoreRoute() {
-        return this.$route.path === '/';
+        return this.$route.path === '/authorization';
       },
      },
     methods: {
