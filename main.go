@@ -3,11 +3,9 @@ package main
 import (
 	"ChatPerson/db"
 	"github.com/labstack/echo"
-	//	"site/models"
 	"ChatPerson/handlers"
 	"ChatPerson/repository"
 	"github.com/labstack/echo/middleware"
-	//"net/http"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/websocket"
@@ -22,13 +20,22 @@ func main() {
 	h := handlers.NewHandler(repository.NewChatModel(d))
 	e.Static("/", "./chat_vue/dist/")
 
-	e.GET("/chats", h.Chats)
-	e.GET("/chat/:userId", h.Chat)
-	e.GET("/contacts", h.Contacts)
-	//e.GET("/chat/:name", h.SingleChat)
-	e.POST("/message", h.AddMessage)
-	e.GET("/contact/:id", h.SingleCustomer)
+	//e.GET("/chats", h.Chats)
+	e.GET("/chats/:userId", h.Chats)
+	e.GET("/contacts/:userId", h.Contacts)
+	e.POST("/message/:userId", h.AddMessage)
+	e.GET("/mycontact/:userId", h.MyContact)
+	e.POST("/updateinfo/:userId", h.UpdateMyContact)
 	e.GET("/socket", socketReaderCreate)
+	e.GET("/authorization", h.Authorisation)
+	e.GET("/logout", h.Logout)
+	e.GET("/FBLogin", h.FBLogin)
+	e.GET("/GoogleLogin", h.GoogleLogin)
+	e.POST("/login", h.Login)
+	e.PUT("/relations", h.SetRelation)
+	e.DELETE("/relations", h.DeleteRelation)
+	e.POST("/relations", h.ChangeRelation)
+	e.POST("/registrationPost", h.RegistrationPost)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

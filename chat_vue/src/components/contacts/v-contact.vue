@@ -47,7 +47,7 @@
     .user__name {
       font-weight: bold;
       text-align: left;
-      flex-basis: 50%;
+      flex-basis: 75%;
       padding-left: 15px;
     }
     .user__status {
