@@ -4,7 +4,7 @@ import (
 )
 
 func (p *ChatModel) CreateUser(contact models.Contact) {
-	p.db.Create(&contact)
+	p.db.Omit("Relation").Create(&contact)
 }
 
 func (p *ChatModel) FindCustomerByName(userName string) models.Contact {

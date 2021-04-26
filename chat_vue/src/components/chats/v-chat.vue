@@ -5,10 +5,10 @@
           v-for="chat in chats"
           :key="chat.Id"
       >
-      <div v-if="chat.Chat!=null" class='v-user' @click="toUserChat(chat)">
+      <div  class='v-user' @click="toUserChat(chat)">
           <div class="v-user__avatar"></div>
           <div class="v-user__info">
-            <p class="info__name">{{chat.Name}}</p>
+            <p class="info">{{chat.Name}}</p>
             <p class="info__last-message">{{chat.Chat[chat.Chat.length-1].Text}}</p>
           </div>
           <div class="v-user__time">{{chat.Chat[chat.Chat.length-1].Time}}</div>
@@ -16,7 +16,6 @@
     </div>
 </div>
   <div class='v-user-chat'>
-<span>I'm {{this.AuthorizedUser}}</span>
 <span>{{name}}</span>
   <hr/>
     <v-message
@@ -43,21 +42,18 @@
 
 <script>
   import vMessage from './v-message'
- // import vUser from '../v-user'
-  import axios from 'axios'
+  import {mapActions, mapState} from 'vuex'
 
   export default {
     name: "v-user-chat",
     components: {
       vMessage,
-   //   vUser
     },
 
     data() {
       return {
-      userId: null,
+      userTo: null,
       name: 'Please select contact to start chat',
-        chats:[],
         messages:[],
         connection: null,
         textValue: '',
@@ -65,50 +61,51 @@
         serverUrl: "ws://localhost:8080/socket"
       }
     },
-
-    mounted: function() {
-    console.log("mounted")
+  computed: {
+      ...mapState([
+        'chats',
+        'userId'
+       ])
+    },
+     mounted: function() {
           this.connectToWebsocket()
-          this.getChats()
-          console.log(this.AuthorizedUser)
+          this.FETCH_CHATS()
+          this.defaultChat()
         },
     methods: {
-    getChats() {
-         axios.get('http://localhost:8080/chats')
-           .then((response)=>  {
-           //response.data.pressInformation.sort(function(a, b){return b['Id']-a['Id']})//добавить сортировку месседжей в поле чата
-               this.chats = response.data;
-               console.log(this.chats,"***")
-           })
+
+    defaultChat(){
+          this.messages = this.chats[0].Chat
+          this.userTo = this.chats[0].Id
+          this.name = this.chats[0].Name
     },
+
+     ...mapActions([
+            'FETCH_CHATS',
+            'SEND_MSG_TO_CHAT'
+          ]),
     toUserChat(chat) {
-          console.log(chat,"++++", chat.Id)
           this.messages = chat.Chat
-            this.userId = chat.Id
+            this.userTo = chat.Id
             this.name = chat.Name
+           /* this.$router.push({
+            query: {'id': this.userTo}
+          });*/
           },
       sendMessage() {
         this.chat = {
-                 Time: new Date().toLocaleTimeString('en-US',
-                   {
-                     hour12: false,
-                     hour: "numeric",
-                     minute: "numeric"
-                   }
-                 ),
-                 Text: this.textValue,
-                 UserId: this.userId,
+                  Text: this.textValue,
+                 UserId: this.userTo,
                  Type: "own"
                }
                this.messages.push(this.chat)
-               console.log(this.chat, "*****")
             this.connection.send(this.chat.Text);
-            axios.post('http://localhost:8080/message', this.chat)
+             this.SEND_MSG_TO_CHAT({chat: this.chat})
                 .then((response) => {
                   console.log (response);
                   this.textValue = ''
-                });
-                this.getChats()
+                })
+                 this.FETCH_CHATS()
       },
             connectToWebsocket() {
                    this.connection = new WebSocket( this.serverUrl);
@@ -120,12 +117,12 @@
                   },
 
               handleNewMessage(event) {
-              this.getChats();
-              console.log(event.data)
-               //this.messages = this.chat.Chat
+               this.FETCH_CHATS()
+                console.log(event.data)
+              // this.messages = this.chat.Chat
                 //  let data = event.data;
                //    data = data.split(/\r?\n/);
-               //    this.messages.push({Text: event.data});
+                //   this.messages.push({Text: event.data});
                   }
     }
   }
@@ -193,7 +190,7 @@
     max-width: 170px;
     flex-basis: 50%;
   }
-    .info__name {
+    .info {
       font-weight: bold;
     }
     .info__last-message {

@@ -24,7 +24,7 @@
       className() {
         return {
           'chat__own': this.message.Type === 'own',
-          'chat__others': this.message.Type === 'others'
+          'chat__other': this.message.Type === 'other'
         }
       }
     }
@@ -37,7 +37,7 @@
     display: flex;
     justify-content: flex-end;
 }
-  .chat__others{
+  .chat__other{
       margin: 20px;
     display: flex;
     justify-content: flex-start;
